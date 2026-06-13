@@ -56,7 +56,7 @@ function renderGrid(items) {
   items.forEach(stamp => {
     const el = document.createElement('div'); el.className = 'card';
     
-    // Stringify and escape item data payload safely
+    // Stringify and escape item data payload safely to pass inside template attributes
     const stampString = JSON.stringify(stamp).replace(/"/g, '&quot;');
     
     el.innerHTML = `
@@ -68,41 +68,57 @@ function renderGrid(items) {
       </div>
       <div>
         <span class="price">$${stamp.price.toFixed(2)}</span>
-        <!-- Invokes our bulletproof custom checkout function -->
         <button class="buy-button" onclick="checkout('${stampString}')">Buy Now</button>
       </div>`;
     grid.appendChild(el);
   });
 }
 
-// --- Native WhatsApp Checkout Hook API ---
+// --- Native Device Mailto Invoice Hook ---
 function checkout(stampDataRaw) {
-  playPopSound(); // Retain your custom synthesized audio reward chime
+  playPopSound(); // Execute your custom synthesized audio reward chime
   
   const stamp = JSON.parse(stampDataRaw.replace(/&quot;/g, '"'));
 
-  // 1. Put your real phone number here (with country code, no spaces or '+' symbol)
-  const MY_PHONE_NUMBER = "919911321555"; 
+  // 1. Enter your real business contact email here
+  const MY_EMAIL = "king@kingofstamps.store"; 
+  
+  // 2. Format a clean order identifier subject string
+  const subjectText = `Order Request: SKU [${stamp.id}] - ${stamp.name}`;
 
-  // 2. Build the template string order message
-  const messageText = 
-`👑 *NEW STAMP ORDER - KING OF STAMPS* 👑
----------------------------------------
-📦 *Product:* ${stamp.name}
-🔢 *Scott #:* ${stamp.scott}
-✨ *Condition:* ${stamp.condition}
-🆔 *SKU/ID:* ${stamp.id}
----------------------------------------
-💰 *Price:* $${stamp.price.toFixed(2)}
+  // 3. Build a highly clean text template payload body
+  const bodyText = 
+`KING OF STAMPS | ORDER INVOICE ENTRY REQUEST
+============================================
 
-Hello! I want to purchase this stamp from your collection. Please send your payment details/UPI ID so I can complete the transaction!`;
+PRODUCT SUMMARY DETAILS:
+--------------------------------------------
+• Stamp Name:   ${stamp.name}
+• Scott Cat #:  ${stamp.scott}
+• Condition:    ${stamp.condition}
+• Unique SKU:   ${stamp.id}
+• Price Cost:   $${stamp.price.toFixed(2)}
 
-  // 3. Cleanly encode the text layout blocks into web-safe URL coordinates
-  const encodedMessage = encodeURIComponent(messageText);
-  const whatsappUrl = `https://whatsapp.com{MY_PHONE_NUMBER}&text=${encodedMessage}`;
+SHIPPING DETAILS (PLEASE COMPLETE BELOW):
+--------------------------------------------
+Full Name: 
+Delivery Address Line 1:
+City, State, ZIP:
+Country Location:
 
-  // 4. Force browser window redirect directly to the chat
-  window.open(whatsappUrl, '_blank');
+--------------------------------------------
+Hello! I would like to purchase this stamp from your collection. 
+Please reply to this email with your payment details so we can coordinate fulfillment!`;
+
+  // 4. Encode strings cleanly using standard URL specifications
+  const encodedSubject = encodeURIComponent(subjectText);
+  const encodedBody = encodeURIComponent(bodyText);
+  
+  // 5. Build standard RFC-compliant uniform resource mailto string
+  const mailtoUrl = `mailto:${MY_EMAIL}?subject=${encodedSubject}&body=${encodedBody}`;
+
+  // 6. Direct browser execution command that launches native system mail apps instantly
+  window.location.href = mailtoUrl;
 }
 
 window.onload = initStore;

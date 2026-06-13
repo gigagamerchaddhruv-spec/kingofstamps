@@ -56,7 +56,7 @@ function renderGrid(items) {
   items.forEach(stamp => {
     const el = document.createElement('div'); el.className = 'card';
     
-    // Stringify and escape item data payload to pass it safely into the native API button click listener
+    // Stringify and escape item data payload safely
     const stampString = JSON.stringify(stamp).replace(/"/g, '&quot;');
     
     el.innerHTML = `
@@ -68,65 +68,41 @@ function renderGrid(items) {
       </div>
       <div>
         <span class="price">$${stamp.price.toFixed(2)}</span>
-        <button class="buy-button" onclick="nativeCheckout('${stampString}')">Buy Now</button>
+        <!-- Invokes our bulletproof custom checkout function -->
+        <button class="buy-button" onclick="checkout('${stampString}')">Buy Now</button>
       </div>`;
     grid.appendChild(el);
   });
 }
 
-// --- Native 100% Dependency-Free Browser Checkout Engine ---
-async function nativeCheckout(stampDataRaw) {
-  playPopSound(); // Trigger your custom synthesized audio reward feedback chime
+// --- Native WhatsApp Checkout Hook API ---
+function checkout(stampDataRaw) {
+  playPopSound(); // Retain your custom synthesized audio reward chime
   
-  if (!window.PaymentRequest) {
-    alert("Your browser does not support native web payments. To test, please access this site via a modern mobile browser (Safari/Chrome).");
-    return;
-  }
+  const stamp = JSON.parse(stampDataRaw.replace(/&quot;/g, '"'));
 
-  try {
-    const stamp = JSON.parse(stampDataRaw.replace(/&quot;/g, '"'));
+  // 1. Put your real phone number here (with country code, no spaces or '+' symbol)
+  const MY_PHONE_NUMBER = "919999999999"; 
 
-    // 1. Declare Supported Transaction Methods (Visa, Mastercard, Apple Pay/Google Pay tokens)
-    const supportedMethods = [{
-      supportedMethods: 'basic-card',
-      data: { supportedNetworks: ['visa', 'mastercard', 'amex', 'discover'] }
-    }];
+  // 2. Build the template string order message
+  const messageText = 
+`👑 *NEW STAMP ORDER - KING OF STAMPS* 👑
+---------------------------------------
+📦 *Product:* ${stamp.name}
+🔢 *Scott #:* ${stamp.scott}
+✨ *Condition:* ${stamp.condition}
+🆔 *SKU/ID:* ${stamp.id}
+---------------------------------------
+💰 *Price:* $${stamp.price.toFixed(2)}
 
-    // 2. Define the Active Invoice Pricing Totals
-    const paymentDetails = {
-      total: {
-        label: 'Total Purchase Amount',
-        amount: { currency: 'USD', value: stamp.price.toString() }
-      },
-      displayItems: [{
-        label: `${stamp.name} (Scott #${stamp.scott})`,
-        amount: { currency: 'USD', value: stamp.price.toString() }
-      }]
-    };
+Hello! I want to purchase this stamp from your collection. Please send your payment details/UPI ID so I can complete the transaction!`;
 
-    // 3. User Shipping & Profile Parameters Options
-    const options = { 
-      requestShipping: true, 
-      requestPayerEmail: true, 
-      requestPayerPhone: true 
-    };
+  // 3. Cleanly encode the text layout blocks into web-safe URL coordinates
+  const encodedMessage = encodeURIComponent(messageText);
+  const whatsappUrl = `https://whatsapp.com{MY_PHONE_NUMBER}&text=${encodedMessage}`;
 
-    // Initialize Request and Invoke the Browser's Native Overlay UI Sheet
-    const request = new PaymentRequest(supportedMethods, paymentDetails, options);
-    const paymentResponse = await request.show();
-    
-    // ---> Your Secure Transaction Processing Hooks Happen Here <---
-    console.log("Secure Card Details Token:", paymentResponse.details);
-    console.log("Collector Delivery Address:", paymentResponse.shippingAddress);
-    console.log("Collector Contact:", paymentResponse.payerEmail, paymentResponse.payerPhone);
-    
-    // Close the native browser card drawer UI successfully
-    await paymentResponse.complete('success');
-    alert(`Success! Order for "${stamp.name}" initialized. Detailed transaction records logged to your developer console.`);
-
-  } catch (err) {
-    console.error("Native transaction request interrupted or closed:", err);
-  }
+  // 4. Force browser window redirect directly to the chat
+  window.open(whatsappUrl, '_blank');
 }
 
 window.onload = initStore;

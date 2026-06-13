@@ -2,7 +2,12 @@ let stampsData = [];
 let activeFilter = 'all';
 let audioCtx = null;
 
-// --- Web Audio API UI Sound Synthesis Core ---
+// --- Initialize free EmailJS system right at startup ---
+(function() {
+  // Go to emailjs.com, sign up for free, and paste your Public Key here
+  emailjs.init({ publicKey: "YOUR_EMAILJS_PUBLIC_KEY" });
+})();
+
 function initAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 }
@@ -27,7 +32,6 @@ function playPopSound() {
   osc.start(); osc.stop(audioCtx.currentTime + 0.12);
 }
 
-// --- Store Interface Operations Routine ---
 async function initStore() {
   try {
     const res = await fetch('catalog.json');
@@ -55,8 +59,6 @@ function renderGrid(items) {
 
   items.forEach(stamp => {
     const el = document.createElement('div'); el.className = 'card';
-    
-    // Stringify and escape item data payload safely to pass inside template attributes
     const stampString = JSON.stringify(stamp).replace(/"/g, '&quot;');
     
     el.innerHTML = `
@@ -68,57 +70,62 @@ function renderGrid(items) {
       </div>
       <div>
         <span class="price">$${stamp.price.toFixed(2)}</span>
-        <button class="buy-button" onclick="checkout('${stampString}')">Buy Now</button>
+        <button class="buy-button" onclick="openCheckout('${stampString}')">Buy Now</button>
       </div>`;
     grid.appendChild(el);
   });
 }
 
-// --- Native Device Mailto Invoice Hook ---
-function checkout(stampDataRaw) {
-  playPopSound(); // Execute your custom synthesized audio reward chime
-  
+// --- Dynamic Modal Controls ---
+function openCheckout(stampDataRaw) {
+  playPopSound();
   const stamp = JSON.parse(stampDataRaw.replace(/&quot;/g, '"'));
-
-  // 1. Enter your real business contact email here
-  const MY_EMAIL = "king@kingofstamps.store"; 
   
-  // 2. Format a clean order identifier subject string
-  const subjectText = `Order Request: SKU [${stamp.id}] - ${stamp.name}`;
-
-  // 3. Build a highly clean text template payload body
-  const bodyText = 
-`KING OF STAMPS | ORDER INVOICE ENTRY REQUEST
-============================================
-
-PRODUCT SUMMARY DETAILS:
---------------------------------------------
-• Stamp Name:   ${stamp.name}
-• Scott Cat #:  ${stamp.scott}
-• Condition:    ${stamp.condition}
-• Unique SKU:   ${stamp.id}
-• Price Cost:   $${stamp.price.toFixed(2)}
-
-SHIPPING DETAILS (PLEASE COMPLETE BELOW):
---------------------------------------------
-Full Name: 
-Delivery Address Line 1:
-City, State, ZIP:
-Country Location:
-
---------------------------------------------
-Hello! I would like to purchase this stamp from your collection. 
-Please reply to this email with your payment details so we can coordinate fulfillment!`;
-
-  // 4. Encode strings cleanly using standard URL specifications
-  const encodedSubject = encodeURIComponent(subjectText);
-  const encodedBody = encodeURIComponent(bodyText);
+  document.getElementById('modalTitle').innerText = stamp.name;
+  document.getElementById('modalPrice').innerText = `$${stamp.price.toFixed(2)}`;
+  document.getElementById('formStampId').value = stamp.id;
+  document.getElementById('formStampName').value = stamp.name;
   
-  // 5. Build standard RFC-compliant uniform resource mailto string
-  const mailtoUrl = `mailto:${MY_EMAIL}?subject=${encodedSubject}&body=${encodedBody}`;
+  document.getElementById('checkoutModal').style.display = 'flex';
+}
 
-  // 6. Direct browser execution command that launches native system mail apps instantly
-  window.location.href = mailtoUrl;
+function closeModal() {
+  playClickSound();
+  document.getElementById('checkoutModal').style.display = 'none';
+  document.getElementById('orderForm').reset();
+}
+
+// --- Submit Forms Straight to Free Email API Payload ---
+async function submitOrder(event) {
+  event.preventDefault();
+  playPopSound();
+  
+  const submitBtn = document.querySelector('.submit-order-btn');
+  submitBtn.innerText = "SENDING...";
+  submitBtn.disabled = true;
+
+  const templateParams = {
+    stamp_id: document.getElementById('formStampId').value,
+    stamp_name: document.getElementById('formStampName').value,
+    buyer_name: document.getElementById('custName').value,
+    buyer_email: document.getElementById('custEmail').value,
+    shipping_address: document.getElementById('custAddress').value
+  };
+
+  try {
+    // 1. Go to emailjs.com -> add your email service -> add an email template layout
+    // 2. Paste your unique Service ID and Template ID strings below:
+    await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams);
+    
+    alert("ORDER INVOICE SENT! Check your inbox, we will contact you to coordinate fulfillment.");
+    closeModal();
+  } catch (err) {
+    console.error("EmailJS Transmission Failure:", err);
+    alert("Failed to deliver order request. Please double check API configurations parameters.");
+  } finally {
+    submitBtn.innerText = "CONFIRM ORDER";
+    submitBtn.disabled = false;
+  }
 }
 
 window.onload = initStore;

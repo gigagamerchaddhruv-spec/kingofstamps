@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>King of Stamps | Online Showcase</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Fetching secondary clean body text typography from Bunny Fonts CDN -->
   <link href="https://bunny.net" rel="stylesheet">
+  <!-- Connect to the EmailJS SDK API Delivery Network -->
+  <script src="https://jsdelivr.net"></script>
 </head>
 <body>
 
   <header>
-    <!-- Top Left Aligned Brutalist Text Logo Module -->
     <div class="logo-container">
       <span class="logo-text">KING</span>
       <span class="logo-subtext">OF STAMPS</span>
@@ -23,14 +23,12 @@
       </div>
     </div>
 
-    <!-- Interface Control Elements -->
     <div class="controls">
       <button onclick="setFilter('all')">All</button>
       <button onclick="setFilter('individual')">Gems</button>
       <button onclick="setFilter('pack')">Packs</button>
       <button onclick="setFilter('random')">Mystery Bags</button>
       
-      <!-- Minimalist Icon-Only Expanding Search Box -->
       <div class="search-box-wrapper">
         <span class="search-emoji">🔍</span>
         <input type="text" id="searchBar" placeholder="SEARCH..." oninput="filterCatalog()">
@@ -39,6 +37,28 @@
   </header>
   
   <main id="stamp-grid"></main>
+
+  <!-- --- 3D Duolingo Style Checkout Modal Box Layer --- -->
+  <div id="checkoutModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <h2 id="modalTitle">ORDER ENTRY</h2>
+      <p id="modalPrice" class="price"></p>
+      
+      <form id="orderForm" onsubmit="submitOrder(event)">
+        <input type="hidden" id="formStampId">
+        <input type="hidden" id="formStampName">
+        
+        <input type="text" id="custName" placeholder="YOUR FULL NAME" required>
+        <input type="email" id="custEmail" placeholder="YOUR EMAIL ADDRESS" required>
+        <textarea id="custAddress" placeholder="COMPLETE SHIPPING ADDRESS" rows="3" required></textarea>
+        
+        <div class="modal-buttons">
+          <button type="submit" class="submit-order-btn">CONFIRM ORDER</button>
+          <button type="button" class="close-modal-btn" onclick="closeModal()">CANCEL</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

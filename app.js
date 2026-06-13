@@ -82,7 +82,7 @@ function checkout(stampDataRaw) {
   const stamp = JSON.parse(stampDataRaw.replace(/&quot;/g, '"'));
 
   // 1. Put your real phone number here (with country code, no spaces or '+' symbol)
-  const MY_PHONE_NUMBER = "919999999999"; 
+  const MY_PHONE_NUMBER = "919911321555"; 
 
   // 2. Build the template string order message
   const messageText = 

@@ -1,0 +1,303 @@
+/* --- 1. Custom Typography Import Engine (Ortland OTF mapping) --- */
+@font-face {
+  font-family: 'Ortland';
+  src: url('fonts/ortland.otf') format('opentype'); /* Configured specifically for your .otf binary asset */
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg-color: #000000;         /* Pitch black canvas background */
+  --card-bg: #111111;          /* Dark charcoal product frames */
+  --neon-white: #ffffff;       /* Primary contrast white elements */
+  --stamp-border: #ff3366;     /* Electric Pink signature theme accent */
+  --heavy-font: 'Ortland', 'Impact', sans-serif; 
+  --body-font: 'Space Grotesk', sans-serif;
+}
+
+/* --- Base Layout Initialization --- */
+* {
+  box-sizing: border-box;
+}
+
+body { 
+  font-family: var(--body-font);
+  margin: 0; 
+  padding: 0 40px 40px 40px; 
+  background-color: var(--bg-color); 
+  color: var(--neon-white);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* Lock viewport bounds entirely */
+}
+
+/* --- Bug-Free Responsive Header Layout --- */
+header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 30px 0;
+  margin-bottom: 50px; 
+  border-bottom: 5px solid #222222; /* 3D linear separation divider line */
+  flex-wrap: nowrap; 
+  gap: 20px;
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Mega-Thick Brutalist Logo System --- */
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 10px 40px 10px 0; /* Creates structural clearance for overlapping badge */
+  user-select: none;
+}
+
+.logo-text {
+  font-family: var(--heavy-font);
+  font-size: clamp(2.5rem, 5vw, 4.5rem); 
+  font-weight: 900;
+  line-height: 0.8;
+  color: var(--stamp-border); /* Locked completely to Electric Pink */
+  letter-spacing: -1px;
+  text-transform: uppercase;
+}
+
+.logo-subtext {
+  font-family: var(--heavy-font);
+  font-size: clamp(1rem, 2vw, 1.8rem);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--neon-white);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Tactile Duolingo-Style Circular Postmark Badge */
+.logo-badge {
+  position: absolute;
+  top: -5px;
+  right: -25px;
+  width: 65px;
+  height: 65px;
+  background-color: var(--stamp-border);
+  border: 3px solid var(--neon-white);
+  border-bottom-width: 7px; /* 3D Base footprint shadow */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(12deg); /* Asymmetric playful pivot angle */
+  box-sizing: border-box;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.logo-container:hover .logo-badge {
+  transform: scale(1.12) rotate(-5deg);
+  border-color: var(--stamp-border);
+  background-color: var(--neon-white);
+}
+
+.logo-container:hover .logo-badge .badge-core { color: var(--stamp-border); }
+.logo-container:hover .logo-badge .badge-rim { color: #000000; }
+
+.badge-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+.badge-core { font-family: var(--heavy-font); font-size: 1.3rem; font-weight: 900; color: var(--neon-white); margin-bottom: -1px; }
+.badge-rim { font-family: var(--body-font); font-size: 0.6rem; font-weight: 700; color: #000000; }
+
+/* --- Control Interface Array --- */
+.controls { 
+  display: flex; 
+  gap: 14px; 
+  align-items: center; 
+  flex-wrap: nowrap; 
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+header button { 
+  position: relative;
+  padding: 12px 24px; 
+  background: #111111; 
+  color: var(--neon-white); 
+  border: 3px solid var(--neon-white); 
+  border-bottom: 7px solid var(--neon-white); 
+  border-radius: 20px; 
+  cursor: pointer; 
+  font-family: var(--heavy-font);
+  font-size: 1.1rem; 
+  text-transform: uppercase; 
+  transition: transform 0.05s ease, border-bottom-width 0.05s ease, background-color 0.15s ease; 
+  user-select: none;
+  white-space: nowrap; 
+}
+header button:active { transform: translateY(4px); border-bottom-width: 3px; }
+header button:hover { background-color: var(--neon-white); color: var(--bg-color); }
+
+/* --- Fixed Expanding Search Wrapper Layout --- */
+.search-box-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #111111;
+  border: 3px solid var(--neon-white);
+  border-bottom: 7px solid var(--neon-white);
+  border-radius: 20px;
+  width: 65px; 
+  height: 52px;
+  overflow: hidden;
+  flex-shrink: 0; 
+  transition: width 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.15s;
+}
+
+/* Absorbs width changes smoothly within the flex layer line */
+.search-box-wrapper:hover,
+.search-box-wrapper:focus-within {
+  width: 240px; 
+  border-color: var(--stamp-border);
+  border-bottom-color: var(--stamp-border);
+}
+
+.search-emoji {
+  font-size: 1.3rem;
+  padding-left: 16px;
+  user-select: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+#searchBar { 
+  width: 100%;
+  padding: 10px 16px 10px 10px;
+  background: transparent;
+  border: none;
+  font-family: var(--body-font); 
+  font-weight: 700; 
+  font-size: 1rem; 
+  color: var(--neon-white); 
+  text-transform: uppercase;
+}
+#searchBar:focus { outline: none; }
+
+/* --- Fluid Stamp Card Grid Framework --- */
+#stamp-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+  gap: 35px; 
+  max-width: 1400px; 
+  margin: 0 auto; 
+}
+
+.card { 
+  background: var(--card-bg); 
+  border: 3px solid #333333; 
+  border-bottom: 9px solid #333333; 
+  border-radius: 24px; 
+  padding: 24px; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: space-between;
+  transition: border-color 0.2s ease, border-bottom-color 0.2s ease;
+}
+.card:hover { border-color: var(--neon-white); border-bottom-color: var(--neon-white); }
+
+.card img { 
+  width: 100%; 
+  height: 220px; 
+  object-fit: contain; 
+  background: #000000;
+  border: 3px dashed #444; 
+  border-radius: 18px; 
+  padding: 15px;
+  box-sizing: border-box;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+.card img:hover { transform: scale(1.18); cursor: zoom-in; z-index: 10; border-color: var(--stamp-border); }
+
+.card-info { margin: 20px 0 10px 0; }
+.card h3 { font-family: var(--heavy-font); font-size: 1.6rem; line-height: 1.1; margin: 0 0 8px 0; text-transform: uppercase; }
+.meta { font-family: var(--body-font); font-weight: 700; font-size: 0.85rem; color: var(--stamp-border); margin: 0 0 12px 0; text-transform: uppercase; }
+.desc { font-size: 0.95rem; color: #bbb; margin: 0; line-height: 1.4; font-weight: 500; }
+
+.price { font-family: var(--heavy-font); font-size: 2rem; color: var(--neon-white); margin: 15px 0 10px 0; display: block; }
+
+/* --- 3D Cart Action Trigger Triggers --- */
+.snipcart-add-item { 
+  width: 100%; 
+  background: var(--stamp-border); 
+  color: var(--neon-white); 
+  border: none;
+  border-bottom: 6px solid #b30030; 
+  border-radius: 20px; 
+  font-family: var(--heavy-font);
+  font-size: 1.3rem; 
+  text-transform: uppercase; 
+  padding: 16px; 
+  cursor: pointer;
+  transition: transform 0.05s ease, border-bottom-width 0.05s ease; 
+  user-select: none;
+}
+.snipcart-add-item:hover { background: #ff5c8a; }
+.snipcart-add-item:active { transform: translateY(6px); border-bottom-width: 0px; }
+
+.no-results { grid-column: 1/-1; text-align: center; font-family: var(--heavy-font); color: #333; font-size: 2rem; text-transform: uppercase; padding: 80px 0; }
+
+/* --- Printable Text Fallback Override Vectors --- */
+@media print {
+  .logo-text { color: #000000 !important; text-shadow: none !important; }
+  .logo-subtext { color: #444444 !important; }
+  .logo-badge { border: 2px solid #000000 !important; background: transparent !important; }
+  .badge-core, .badge-rim { color: #000000 !important; }
+}
+
+/* ==========================================================================
+   4. Mobile Breakpoint Media Queries (Unifies structural mobile mechanics)
+   ========================================================================== */
+@media (max-width: 820px) {
+  body { padding: 0 20px 20px 20px; }
+
+  header {
+    flex-direction: column; /* Collapses title elements cleanly below each other */
+    align-items: center;
+    padding: 20px 0;
+    gap: 15px;
+  }
+
+  .logo-container {
+    align-items: center;
+    padding-right: 0;
+  }
+
+  .logo-badge {
+    position: relative;
+    top: 0; right: 0;
+    margin-top: 10px;
+    transform: rotate(0deg);
+  }
+
+  h1 { font-size: 3.2rem; text-align: center; white-space: normal; }
+
+  .controls {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap; /* Permits safe button line cascading on extremely narrow mobile panels */
+  }
+
+  header button {
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  /* Search box smoothly scales to full block line on small mobile screens */
+  .search-box-wrapper { width: 100%; height: 48px; }
+  .search-box-wrapper:hover,
+  .search-box-wrapper:focus-within { width: 100%; }
+
+  #stamp-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+}

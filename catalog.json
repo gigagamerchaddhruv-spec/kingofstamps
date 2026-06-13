@@ -1,0 +1,32 @@
+[
+  {
+    "id": "gem-1893-columbian",
+    "type": "individual",
+    "name": "1893 Columbian Exposition 2¢",
+    "scott": "231",
+    "condition": "Mint OG NH",
+    "description": "Landing of Columbus variety. Superb centering, pristine gum sheet backing.",
+    "price": 35.00,
+    "img": "images/columbian.webp"
+  },
+  {
+    "id": "pack-space-50",
+    "type": "pack",
+    "name": "Global Space Exploration Pack",
+    "scott": "Multi",
+    "condition": "Used Mix",
+    "description": "50 unique worldwide stamps featuring rockets, Apollo missions, and astronauts.",
+    "price": 12.50,
+    "img": "images/space-pack.webp"
+  },
+  {
+    "id": "mystery-worldwide-1k",
+    "type": "random",
+    "name": "1000 Bulk Worldwide Mystery Bag",
+    "scott": "Assorted",
+    "condition": "Mixed Used & Mint",
+    "description": "Unsorted off-paper mixture. Guaranteed to contain stamps from at least 40 countries.",
+    "price": 19.95,
+    "img": "images/mystery-bag.webp"
+  }
+]

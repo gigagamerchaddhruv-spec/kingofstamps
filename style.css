@@ -301,3 +301,81 @@ header button:hover { background-color: var(--neon-white); color: var(--bg-color
 
   #stamp-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
 }
+/* ==========================================================================
+   5. Custom Snipcart Overrides (Matches Your Brutalist Theme)
+   ========================================================================== */
+
+/* Change the main backdrop overlay behind the sliding cart panel */
+#snipcart .snipcart-modal {
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* Force the checkout sidebar to use your pitch black theme colors */
+#snipcart .snipcart-cart, 
+#snipcart .snipcart-layout {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+
+/* Stylize checkout headings with your bold Ortland display style */
+#snipcart .snipcart__title,
+#snipcart .snipcart-cart-header__title {
+  font-family: 'Ortland', 'Impact', sans-serif !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  letter-spacing: -0.5px !important;
+}
+
+/* Turn Snipcart item list frames into dark charcoal blocks */
+#snipcart .snipcart-item-line,
+#snipcart .snipcart-layout__sidebar {
+  background-color: #111111 !important;
+  border: 2px solid #222222 !important;
+  border-radius: 16px !important;
+  margin-bottom: 15px !important;
+  padding: 15px !important;
+}
+
+/* Make checkout form input fields thick and 3D */
+#snipcart .snipcart-input__input {
+  background-color: #1a1a1a !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+}
+#snipcart .snipcart-input__input:focus {
+  border-color: #ff3366 !important;
+}
+
+/* Turn standard buttons into chunky 3D electric pink buttons */
+#snipcart .snipcart-base-button {
+  background-color: #ff3366 !important;
+  color: #ffffff !important;
+  font-family: 'Ortland', sans-serif !important;
+  font-size: 1.1rem !important;
+  text-transform: uppercase !important;
+  border-radius: 16px !important;
+  border-bottom: 5px solid #b30030 !important; /* Satisfying 3D button floor base */
+  transition: transform 0.05s ease, border-bottom-width 0.05s ease !important;
+}
+
+#snipcart .snipcart-base-button:hover {
+  background-color: #ff5c8a !important;
+}
+
+#snipcart .snipcart-base-button:active {
+  transform: translateY(4px) !important;
+  border-bottom-width: 0px !important;
+}
+
+/* Highlight total prices and active links in electric pink */
+#snipcart .snipcart-summary-fees__amount,
+#snipcart .snipcart-cart-summary__total-number,
+#snipcart .snipcart-item-line__price {
+  color: #ff3366 !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-weight: 700 !important;
+}

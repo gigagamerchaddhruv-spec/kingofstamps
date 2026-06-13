@@ -5,7 +5,7 @@ let audioCtx = null;
 // --- Initialize free EmailJS system right at startup ---
 (function() {
   // Go to emailjs.com, sign up for free, and paste your Public Key here
-  emailjs.init({ publicKey: "YOUR_EMAILJS_PUBLIC_KEY" });
+  emailjs.init({ publicKey: "WksWqpMZfYlSxJh0w" });
 })();
 
 function initAudio() {
@@ -115,7 +115,7 @@ async function submitOrder(event) {
   try {
     // 1. Go to emailjs.com -> add your email service -> add an email template layout
     // 2. Paste your unique Service ID and Template ID strings below:
-    await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams);
+    await emailjs.send('service_jinv6kp', 'template_kssdepj', templateParams);
     
     alert("ORDER INVOICE SENT! Check your inbox, we will contact you to coordinate fulfillment.");
     closeModal();
